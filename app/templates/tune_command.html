@@ -87,7 +87,7 @@
         $('#bt1').click(function(){
             $('#bt2').attr('disabled', false)
             switch($('#algo_name').val()) {
-                case 'vae':
+                case 'multi-vae':
                     $('#batch_size').parent().show()
                     $('#dropout').parent().show()
                     $('#factors').parent().hide()
@@ -203,6 +203,9 @@
             tmp = $('#problem_type').val()
             base += ' --problem_type=' + tmp
             tmp = $('#algo_name').val()
+            if (tmp == 'multi-vae'){
+                tmp = 'vae'
+            }
             base += ' --algo_name=' + tmp
             tmp = $('#dataset').val()
             base += ' --dataset=' + tmp

@@ -151,7 +151,7 @@
         $(document).ready(function(){
             // --------- problem type event ---------
             if($('#problem_type').val() == 'pair') {
-                    $('#vae').hide()
+                    $('#multi-vae').hide()
                     $('#cdae').hide()
                     $('#item2vec').hide()
                     $('#knn').hide()
@@ -164,7 +164,7 @@
                     $('#TL').show()
                     $('#HL').show()
                 } else {
-                    $('#vae').show()
+                    $('#multi-vae').show()
                     $('#cdae').show()
                     $('#item2vec').show()
                     $('#knn').show()
@@ -182,7 +182,7 @@
                     //point remove nothing
                     //pair remove vae cdae item2vec knn pop slim
                     if($('#problem_type').val() == 'pair') {
-                        $('#vae').hide()
+                        $('#multi-vae').hide()
                         $('#cdae').hide()
                         $('#item2vec').hide()
                         $('#userknn').hide()
@@ -198,7 +198,7 @@
                         $('#HL').show()
                     } 
                     else {
-                        $('#vae').show()
+                        $('#multi-vae').show()
                         $('#cdae').show()
                         $('#item2vec').show()
                         $('#userknn').show()

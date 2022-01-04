@@ -25,7 +25,7 @@
             $('#bt1').click(function(){
                 // get basic settings value 
                 switch($('#algo_name').val()) {
-                    case 'vae':
+                    case 'multi-vae':
                         $('#ass').empty()
                         $('#ass').append(
                             '<form action="" method="post" novalidate="novalidate">' +
@@ -260,6 +260,9 @@
                 tmp = $('#problem_type').val()
                 base += ' --problem_type=' + tmp
                 tmp = $('#algo_name').val()
+                if (tmp == 'multi-vae'){
+                    tmp = 'vae'
+                }
                 base += ' --algo_name=' + tmp
                 tmp = $('#dataset').val()
                 base += ' --dataset=' + tmp
@@ -294,7 +297,7 @@
                 base += ' --loss_type=' + tmp
 
                 switch($('#algo_name').val()) {
-                    case 'vae':
+                    case 'multi-vae':
                         tmp = $('#batch_size').val()
                         base += ' --batch_size=' + tmp
                         tmp = $('#num_ng').val()

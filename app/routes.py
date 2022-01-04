@@ -14,7 +14,7 @@ problem_type = [
     {'name': 'pair'},
 ]
 algo_name = [
-    {'name': 'vae'},
+    {'name': 'multi-vae'},
     {'name': 'cdae'},
     {'name': 'mf'},
     {'name': 'fm'},
