@@ -15,15 +15,11 @@ problem_type = [
 ]
 algo_name = [
     {'name': 'multi-vae'},
-    {'name': 'cdae'},
+    {'name': 'ngcf'},
     {'name': 'mf'},
     {'name': 'fm'},
     {'name': 'nfm'},
-    {'name': 'afm'},
-    {'name': 'deepfm'},
     {'name': 'neumf'},
-    {'name': 'item2vec'},
-    {'name': 'userknn'},
     {'name': 'itemknn'},
     {'name': 'pop'},
     {'name': 'slim'},
@@ -45,37 +41,50 @@ dataset_name = [
 ]
 preprocess_methods = [
     {'name': 'origin'},
-    {'name': '5core'},
-    {'name': '10core'},
+    {'name': '5filter'},
+    {'name': '10filter'},
 ]
 test_methods = [
-    {'name': 'tloo (time-aware leave one out)'},
-    {'name': 'loo (leave one out)'},
-    {'name': 'tfo (time-aware fold-out)'},
-    {'name': 'fo (fold-out)'},
-    {'name': 'utfo (time-aware fold-out withuser-level)'},
-    {'name': 'ufo (fold-out with user-level)'},
+    {'name': 'tloo (time-aware leave-one-out)'},
+    {'name': 'rloo (random leave-one-out)'},
+    {'name': 'tsbr (time-aware split-by-ratio)'},
+    {'name': 'rsbr (random split-by-ratio)'},
 ]
 val_methods = [
     {'name': 'tloo'},
     {'name': 'loo'},
-    {'name': 'tfo'},
-    {'name': 'tfo'},
-    {'name': 'utfo'},
-    {'name': 'ufo'},
-    {'name': 'cv'},
+    {'name': 'tsbr'},
+    {'name': 'rsbr'},
+
 ]
 sample_methods = [
-    {'name': 'uniform (uniformly sampling)'},
+    {'name': 'uniform (uniformly sample)'},
     {'name': 'item-ascd (sampling popular items with low rank)'},
     {'name': 'item-desc (sampling popular item with high rank)'},
 ]
 loss_types = [
     {'name': 'CL (Cross-entropy Loss)'},
-    {'name': 'SL (Square Loss)'},
     {'name': 'BPR (BPR Loss)'},
     {'name': 'HL (Hinge Loss)'},
     {'name': 'TL (Top-1 Loss)'},
+]
+
+weight_initializer = [
+    {'name': 'xavier_normal'},
+    {'name': 'normal'},
+    {'name': 'uniform'},
+    {'name': 'xavier_uniform'}
+]
+
+optimizer = [
+    {'name': 'sgd'},
+    {'name': 'adam'},
+    {'name': 'adagrad'},
+]
+
+early_stop = [
+    {'name': True},
+    {'name': False},
 ]
 
 @app.route('/')
@@ -86,7 +95,6 @@ def main():
 
     return render_template(
         'test_command.html', 
-        title='yudi', 
         user=user, 
         score_metric=score_metric,
         problem_type=problem_type,
@@ -96,7 +104,8 @@ def main():
         test_methods=test_methods,
         val_methods=val_methods,
         sample_methods=sample_methods,
-        loss_types=loss_types
+        loss_types=loss_types,
+        weight_initializer=weight_initializer
     )
 
 @app.route('/tune_command')
@@ -104,7 +113,6 @@ def hpo_tuner():
     user = {'username':'Daisy'}
     return render_template(
         'tune_command.html', 
-        title='yudi', 
         user=user, 
         score_metric=score_metric,
         problem_type=problem_type,
@@ -114,5 +122,6 @@ def hpo_tuner():
         test_methods=test_methods,
         val_methods=val_methods,
         sample_methods=sample_methods,
-        loss_types=loss_types
+        loss_types=loss_types,
+        weight_initializer=weight_initializer,
     )

@@ -16,8 +16,8 @@
     <div class="container" style="padding-top: 50px;">
         <ol class='breadcrumb'>       
             <li>DaisyRec</li>
-            <li><a href="/test_command">test_command</a></li>
             <li><a href="/tune_command">tune_command</a></li>
+            <li><a href="/test_command">test_command</a></li>
             <!-- <li><a href="/main">main</a></li>
             <li><a href="/hpo_tuner">hpo_tuner</a></li> -->
         </ol>
@@ -134,7 +134,12 @@
 
                 <div class="form-group col-xs-6">
                     <label>Weight Initializartion Method</label>
-                    <input type='text' class="form-control" id="init_method" value=''>
+                    <!--<input type='text' class="form-control" id="init_method" value=''>-->
+                    <select class='form-control' id='init_method'>
+                        {% for im in weight_initializer %}
+                        <option id="{{im.name}}" value="{{im.name}}">{{im.name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 
                 <div class="form-group col-xs-6">
@@ -168,29 +173,25 @@
             if($('#problem_type').val() == 'pair') {
                     $('#multi-vae').hide()
                     $('#cdae').hide()
-                    $('#item2vec').hide()
-                    $('#knn').hide()
+                    $('#itemknn').hide()
                     $('#pop').hide()
                     $('#slim').hide()
         
-                    $('#CL').hide()
-                    $('#SL').hide()
-                    $('#BPR').show()
-                    $('#TL').show()
-                    $('#HL').show()
+                    $('#CL (Cross-entropy Loss)').hide()
+                    $('#BPR (BPR Loss)').show()
+                    $('#TL (Top-1 Loss)').show()
+                    $('#HL (Hinge Loss)').show()
                 } else {
                     $('#multi-vae').show()
                     $('#cdae').show()
-                    $('#item2vec').show()
-                    $('#knn').show()
+                    $('#itemknn').show()
                     $('#pop').show()
                     $('#slim').show()
         
-                    $('#CL').show()
-                    $('#SL').show()
-                    $('#BPR').hide()
-                    $('#TL').hide()
-                    $('#HL').hide()
+                    $('#CL (Cross-entropy Loss)').show()
+                    $('#BPR (BPR Loss)').hide()
+                    $('#TL (Top-1 Loss)').hide()
+                    $('#HL (Hinge Loss)').hide()
                 }
         
                 $('#problem_type').change(function(){
@@ -198,36 +199,64 @@
                     //pair remove vae cdae item2vec knn pop slim
                     if($('#problem_type').val() == 'pair') {
                         $('#multi-vae').hide()
-                        $('#cdae').hide()
-                        $('#item2vec').hide()
-                        $('#userknn').hide()
                         $('#itemknn').hide()
                         $('#pop').hide()
                         $('#slim').hide()
                         $('#puresvd').hide()
         
-                        $('#CL').hide()
-                        $('#SL').hide()
-                        $('#BPR').show()
-                        $('#TL').show()
-                        $('#HL').show()
+                        $('#CL (Cross-entropy Loss)').hide()
+                        $('#BPR (BPR Loss)').show()
+                        $('#TL (Top-1 Loss)').show()
+                        $('#HL (Hinge Loss)').show()
                     } 
                     else {
                         $('#multi-vae').show()
-                        $('#cdae').show()
-                        $('#item2vec').show()
-                        $('#userknn').show()
                         $('#itemknn').show()
                         $('#pop').show()
                         $('#slim').show()
                         $('#puresvd').show()
         
-                        $('#CL').show()
-                        $('#SL').show()
-                        $('#BPR').hide()
-                        $('#TL').hide()
-                        $('#HL').hide()
+                        $('#CL (Cross-entropy Loss)').show()
+                        $('#BPR (BPR Loss)').hide()
+                        $('#TL (Top-1 Loss)').hide()
+                        $('#HL (Hinge Loss)').hide()
                     }
+                })
+            // --------- weight initialize type event ---------
+            if ($('#algo_name').val() == 'multi-vae'){
+                $('#normal').hide()
+                $('#uniform').hide()
+                $('#xavier_normal').show()
+                $('#xavier_uniform').show()
+            }
+                $('#algo_name').change(function(){
+                    if($('#algo_name').val() == 'multi-vae'){
+                        $('#normal').hide()
+                        $('#uniform').hide()
+                        $('#xavier_normal').show()
+                        $('#xavier_uniform').show()
+                    }else if($('#algo_name').val() == 'ngcf'){
+                        $('#normal').hide()
+                        $('#uniform').hide()
+                        $('#xavier_normal').show()
+                        $('#xavier_uniform').show()
+                    }else if($('#algo_name').val() == 'mf' || $('#algo_name').val() == 'fm'){
+                        $('#normal').show()
+                        $('#uniform').show()
+                        $('#xavier_normal').hide()
+                        $('#xavier_uniform').hide()
+                    }else if($('#algo_name').val() == 'nfm' || $('#algo_name').val() == 'neumf'){
+                        $('#normal').show()
+                        $('#uniform').hide()
+                        $('#xavier_normal').show()
+                        $('#xavier_uniform').show()
+                    }else{
+                        $('#normal').show()
+                        $('#uniform').hide()
+                        $('#xavier_normal').hide()
+                        $('#xavier_uniform').hide()
+                    }
+                    
                 })
             })
     </script>

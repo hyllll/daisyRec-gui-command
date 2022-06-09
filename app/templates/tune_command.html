@@ -5,31 +5,46 @@
     <h2 class='alert alert-info'>Algorithm Specific Settings</h2>
     <h3>paramters needed to tune</h3>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="batch_size" value="batch_size"> Batch Size
+            <input type="checkbox" id="maxk" value="maxk"> maxk
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="dropout" value="dropout"> Dropout Rate
+            <input type="checkbox" id="alpha" value="alpha"> alpha
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="factors" value="factors"> Factors
+            <input type="checkbox" id="elastic" value="elastic"> elastic
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="lr" value="lr"> Learning Rate
+            <input type="checkbox" id="batch_size" value="batch_size"> batch size
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="num_layers" value="num_layers"> Number of Layers
+            <input type="checkbox" id="dropout" value="dropout"> dropout rate
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="num_ng" value="num_ng"> Number of Negative Samplings
+            <input type="checkbox" id="node_dropout" value="node_dropout"> node_dropout
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="reg_1" value="reg_1"> L1 Regularization
+            <input type="checkbox" id="mess_dropout" value="mess_dropout"> mess_dropout
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="reg_2" value="reg_2"> L2 Regularization
+            <input type="checkbox" id="factors" value="factors"> factors
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="kl_reg" value="kl_reg"> KL Regularization
+            <input type="checkbox" id="lr" value="lr"> learning rate
+        </label>
+        <label class="checkbox-inline col-xs-3">
+            <input type="checkbox" id="num_layers" value="num_layers"> number of layers
+        </label>
+        <label class="checkbox-inline col-xs-3">
+            <input type="checkbox" id="num_ng" value="num_ng"> number of negative samplings
+        </label>
+        <label class="checkbox-inline col-xs-3">
+            <input type="checkbox" id="reg_1" value="reg_1"> l1 regularization
+        </label>
+        <label class="checkbox-inline col-xs-3">
+            <input type="checkbox" id="reg_2" value="reg_2"> l2 regularization
+        </label>
+        <label class="checkbox-inline col-xs-3">
+            <input type="checkbox" id="kl_reg" value="kl_reg"> kl regularization
         </label>
     <div id='ass'>
 
@@ -56,7 +71,8 @@
         check_list = [
             "batch_size", "dropout", "factors",
             "lr", "num_layers", "num_ng",
-            "reg_1", "reg_2", "kl_reg"
+            "reg_1", "reg_2", "kl_reg", "maxk",
+            "node_dropout", "mess_dropout", "alpha", "elastic"
         ]
         for(i = 0;i < check_list.length;i++) {
             if($('#' + check_list[i]).is(":checked")) {
@@ -97,6 +113,11 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().show()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'cdae':
@@ -109,6 +130,11 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'item2vec':
@@ -116,8 +142,37 @@
                 case 'userknn':
                     break
                 case 'itemknn':
+                    $('#batch_size').parent().hide()
+                    $('#dropout').parent().hide()
+                    $('#factors').parent().hide()
+                    $('#lr').parent().hide()
+                    $('#num_layers').parent().hide()
+                    $('#num_ng').parent().hide()
+                    $('#reg_1').parent().hide()
+                    $('#reg_2').parent().hide()
+                    $('#kl_reg').parent().hide()
+                    $('#maxk').parent().show()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     break
                 case 'slim':
+                    $('#batch_size').parent().hide()
+                    $('#dropout').parent().hide()
+                    $('#factors').parent().hide()
+                    $('#lr').parent().hide()
+                    $('#num_layers').parent().hide()
+                    $('#num_ng').parent().hide()
+                    $('#reg_1').parent().hide()
+                    $('#reg_2').parent().hide()
+                    $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().show()
+                    $('#elastic').parent().show()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
+                    $('#ass').empty()
                     break
                 case 'pop':
                     break
@@ -131,6 +186,11 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'fm':
@@ -143,6 +203,11 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'neumf':
@@ -155,6 +220,11 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'afm':
@@ -169,12 +239,48 @@
                     $('#reg_1').parent().show()
                     $('#reg_2').parent().show()
                     $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
                     $('#ass').empty()
                     break
                 case 'deepfm':
                     break
                 case 'puresvd':
+                    $('#batch_size').parent().hide()
+                    $('#dropout').parent().hide()
+                    $('#factors').parent().show()
+                    $('#lr').parent().hide()
+                    $('#num_layers').parent().hide()
+                    $('#num_ng').parent().hide()
+                    $('#reg_1').parent().hide()
+                    $('#reg_2').parent().hide()
+                    $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().hide()
+                    $('#mess_dropout').parent().hide()
+                    $('#ass').empty()
                     break
+                case 'ngcf':
+                    $('#batch_size').parent().show()
+                    $('#dropout').parent().hide()
+                    $('#factors').parent().show()
+                    $('#lr').parent().show()
+                    $('#num_layers').parent().hide()
+                    $('#num_ng').parent().show()
+                    $('#reg_1').parent().show()
+                    $('#reg_2').parent().show()
+                    $('#kl_reg').parent().hide()
+                    $('#maxk').parent().hide()
+                    $('#alpha').parent().hide()
+                    $('#elastic').parent().hide()
+                    $('#node_dropout').parent().show()
+                    $('#mess_dropout').parent().show()
+                    $('#ass').empty()
             }
 
         })
