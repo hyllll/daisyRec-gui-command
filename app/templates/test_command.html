@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container" style="padding-bottom: 20px; padding-top: 20px">
+    <div class="container hidden" id="specific_setting_div_test" style="padding-bottom: 20px; padding-top: 20px">
         <h2 class='alert alert-info'>Algorithm Specific Settings</h2>
+        <input type="text" class="form-control hidden" id="param_list" value=""> <!--save algorithm specific parameters -->
+        <form onsubmit="return false" id="param_setting">
         <div id='ass'>
 
         </div>
         <!-- <div class="col-xs-12"><button class="btn btn-default btn-lg" id="bt2">Generate</button></div> -->
-        <div class="col-xs-12"><button class="btn btn-default btn-lg" id="bt2" disabled>Generate</button></div>
+        <div class="col-xs-12"><button class="btn btn-default btn-lg" id="bt2" type="submit">Generate</button></div>
+        </form>
     </div>
-    <div class="container" style="padding-bottom: 50px;">
+    <div class="container hidden" id="test_command_div" style="padding-bottom: 50px;">
         <h2 class='alert alert-info'>main.py Script Command Result</h2>
         <div class="jumbotro">
             <textarea id='res' class="form-control" rows='8' style="resize: none"></textarea>
@@ -34,77 +37,78 @@
             $('#tune_epochs').parent().hide()
             // ----------------------------------------
             $('#bt1').click(function(){
-                $('#bt2').attr('disabled', false)
+                $('#specific_setting_div_test').removeClass("hidden")
+                $('#test_command_div').removeClass("hidden")
                 // get basic settings value 
                 switch($('#algo_name').val()) {
                     case 'multi-vae':
+                        param = ['batch_size', 'num_ng', 'dropout', 'lr', 'reg_1', 'reg_2', 'kl_reg']
+                        $('#param_list').val(param)
                         $('#ass').empty()
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Dropout</label>' +
-                                    '<input type="text" class="form-control" id="dropout" value="">' +
+                                    '<input type="text" class="form-control" id="dropout" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>KL Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="kl_reg" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="kl_reg" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>'
                         )
                         break
                     case 'cdae':
                         $('#ass').empty()
+                        param = ['batch_size', 'num_ng', 'dropout', 'factors', 'reg_1', 'reg_2', 'lr']
+                        $('#param_list').val(param)
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Factors</label>' +
-                                    '<input type="text" class="form-control" id="factors" value="">' +
+                                    '<input type="text" class="form-control" id="factors" value="" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Dropout</label>' +
-                                    '<input type="text" class="form-control" id="dropout" value="">' +
+                                    '<input type="text" class="form-control" id="dropout" value="" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="reg_2" value="" required="required">' + 
+                                '</div>'
                         )
                         break
                     case 'item2vec': 
@@ -112,165 +116,247 @@
                     case 'userknn':
                         break
                     case 'itemknn':
+                        $('#ass').empty()
+                        param = ['maxk']
+                        $('#param_list').val(param)
+                        $('#ass').append(
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Maxk</label>' +
+                                    '<input type="text" class="form-control" id="maxk" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
+                                '</div>')
                         break
-                    case 'slim': 
+                    case 'slim':
+                        $('#ass').empty()
+                        param = ['alpha', 'elastic']
+                        $('#param_list').val(param)
+                        $('#ass').append(
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Alpha</label>' +
+                                    '<input type="text" class="form-control" id="alpha" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
+                                '</div>' +
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Elastic</label>' +
+                                    '<input type="text" class="form-control" id="elastic" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
+                                '</div>')
                         break
-                    case 'pop':
+                    case 'mostpop':
+                        $('#ass').empty()
+                        param = ['pop_n']
+                        $('#param_list').val(param)
+                        $('#ass').append(
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Pop_n</label>' +
+                                    '<input type="text" class="form-control" id="pop_n" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
+                                '</div>')
                         break
                     case 'mf': 
                         $('#ass').empty()
+                        param = ['batch_size', 'num_ng', 'factors', 'lr', 'reg_1', 'reg_2']
+                        $('#param_list').val(param)
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Factors</label>' +
-                                    '<input type="text" class="form-control" id="factors" value="">' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>' 
                         )     
                         break 
                     case 'fm':
                         $('#ass').empty()
+                        param = ['batch_size', 'num_ng', 'factors', 'lr', 'reg_1', 'reg_2']
+                        $('#param_list').val(param)
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Factors</label>' +
-                                    '<input type="text" class="form-control" id="factors" value="">' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>' 
                         )    
                         break
                     case 'neumf':
                         $('#ass').empty()
+                        param = ['batch_size', 'num_ng', 'factors', 'num_layers', 'dropout', 'lr', 'reg_1', 'reg_2']
+                        $('#param_list').val(param)
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Factors</label>' +
-                                    '<input type="text" class="form-control" id="factors" value="">' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Layers</label>' +
-                                    '<input type="text" class="form-control" id="num_layers" value="">' +
+                                    '<input type="text" class="form-control" id="num_layers" value="" pattern="[1-9]\\d*" placeholder="e.g., 3" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Dropout Rate</label>' +
-                                    '<input type="text" class="form-control" id="dropout" value="">' +
+                                    '<input type="text" class="form-control" id="dropout" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>'
                         )    
                         break
                     case 'afm':
                         break
                     case 'nfm':
                         $('#ass').empty()
+                        param = ['batch_size', 'num_ng', 'factors', 'num_layers', 'dropout', 'lr', 'reg_1', 'reg_2']
+                        $('#param_list').val(param)
                         $('#ass').append(
-                            '<form action="" method="post" novalidate="novalidate" name="setting_form">' +
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Batch Size</label>' +
-                                    '<input type="text" class="form-control" id="batch_size" value="">' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Negative Samples</label>' +
-                                    '<input type="text" class="form-control" id="num_ng" value="">' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Factors</label>' +
-                                    '<input type="text" class="form-control" id="factors" value="">' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Number of Layers</label>' +
-                                    '<input type="text" class="form-control" id="num_layers" value="">' +
+                                    '<input type="text" class="form-control" id="num_layers" value="" pattern="[1-9]\\d*" placeholder="e.g., 4" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' +
                                     '<label>Dropout Rate</label>' +
-                                    '<input type="text" class="form-control" id="dropout" value="">' +
+                                    '<input type="text" class="form-control" id="dropout" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>Learning rate</label>' + 
-                                    '<input type="text" class="form-control" id="lr" value="">' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L1 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_1" value="">' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
                                 '</div>' + 
                                 '<div class="form-group col-xs-6">' + 
                                     '<label>L2 Regularization</label>' + 
-                                    '<input type="text" class="form-control" id="reg_2" value="">' + 
-                                '</div>' + 
-                            '</form>'
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>'
                         )    
                         break
+                    case 'ngcf':
+                        $('#ass').empty()
+                        param = ['num_ng', 'factors', 'node_dropout', 'mess_dropout', 'batch_size', 'lr', 'reg_1', 'reg_2']
+                        $('#param_list').val(param)
+                        $('#ass').append(
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Batch Size</label>' +
+                                    '<input type="text" class="form-control" id="batch_size" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Number of Negative Samples</label>' +
+                                    '<input type="text" class="form-control" id="num_ng" value="" pattern="[1-9]\\d*" placeholder="e.g., 5" required="required">' +
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Factors</label>' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Number of Layers</label>' +
+                                    '<input type="text" class="form-control" id="node_dropout" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Dropout Rate</label>' +
+                                    '<input type="text" class="form-control" id="mess_dropout" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' +
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' + 
+                                    '<label>Learning rate</label>' + 
+                                    '<input type="text" class="form-control" id="lr" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' + 
+                                    '<label>L1 Regularization</label>' + 
+                                    '<input type="text" class="form-control" id="reg_1" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>' + 
+                                '<div class="form-group col-xs-6">' + 
+                                    '<label>L2 Regularization</label>' + 
+                                    '<input type="text" class="form-control" id="reg_2" value="" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required">' + 
+                                '</div>'
+                        )    
                     case 'deepfm':
                         break
                     case 'puresvd':
+                        $('#ass').empty()
+                        param = ['factors']
+                        $('#param_list').val(param)
+                        $('#ass').append(
+                                '<div class="form-group col-xs-6">' +
+                                    '<label>Factors</label>' +
+                                    '<input type="text" class="form-control" id="factors" value="" pattern="[1-9]\\d*" placeholder="e.g., 32" required="required">' +
+                                '</div>')
                         break
                 }
-    
+                return 
             })
 
+
             $('#bt2').click(function() {
-                if(!check_form()){
-                    return
-                }
+                // if(!check_form()){
+                //     return
+                // }
+                var empty_is_valid = true
+                algo_parameters = $('#param_list').val().split(',')
+                for(var i=0; i < algo_parameters.length; i++){
+                    if($('#' + algo_parameters[i]).val() == ""){
+                        empty_is_valid = empty_is_valid && false
+                    }
+                }  
                 base = 'python main.py --epochs=50'
                 tmp = $('#problem_type').val()
                 base += ' --problem_type=' + tmp
@@ -311,6 +397,17 @@
                 tmp = tmp.split(' ')[0]
                 base += ' --loss_type=' + tmp
 
+                tmp = $('#init_method').val()
+                base += ' --initializer=' + tmp
+
+                tmp = $('#optimizer').val()
+                base += ' --optimizer=' + tmp
+
+                tmp = $('#early_stop').val()
+                if(tmp =='false'){
+                    base += ' --early_stop'
+                }
+
                 switch($('#algo_name').val()) {
                     case 'multi-vae':
                         tmp = $('#batch_size').val()
@@ -349,10 +446,18 @@
                     case 'userknn':
                         break
                     case 'itemknn':
+                        tmp = $('#maxk').val()
+                        base += ' --maxk=' + tmp
                         break
                     case 'slim':
+                        tmp = $('#alpha').val()
+                        base += ' --alpha=' + tmp
+                        tmp = $('#elastic').val()
+                        base += ' --elastic=' + tmp
                         break
-                    case 'pop':
+                    case 'mostpop':
+                        tmp = $('#maxk').val()
+                        base += ' --maxk=' + tmp
                         break
                     case 'mf':
                         tmp = $('#batch_size').val()
@@ -423,10 +528,31 @@
                     case 'deepfm':
                         break
                     case 'puresvd':
+                        tmp = $('#puresvd').val()
+                        base += ' --puresvd=' + tmp
                         break
+                    case 'ngcf':
+                    tmp = $('#batch_size').val()
+                        base += ' --batch_size=' + tmp
+                        tmp = $('#num_ng').val()
+                        base += ' --num_ng=' + tmp
+                        tmp = $('#factors').val()
+                        base += ' --factors=' + tmp
+                        tmp = $('#node_dropout').val()
+                        base += ' --node_dropout=' + tmp
+                        tmp = $('#mess_dropout').val()
+                        base += ' --mess_dropout=' + tmp
+                        tmp = $('#lr').val()
+                        base += ' --lr=' + tmp
+                        tmp = $('#reg_1').val()
+                        base += ' --reg_1=' + tmp
+                        tmp = $('#reg_2').val()
+                        base += ' --reg_2=' + tmp
                 }
-
-                $('#res').val(base)
+                if (empty_is_valid){
+                    $('#res').val(base)
+                }
+                
 
             })
 

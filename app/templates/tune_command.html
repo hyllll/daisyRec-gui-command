@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container" style="padding-bottom: 20px; padding-top: 20px">
+<div class="container hidden" id="specific_setting_div_tune" style="padding-bottom: 20px; padding-top: 20px">
     <h2 class='alert alert-info'>Algorithm Specific Settings</h2>
-    <h3>paramters needed to tune</h3>
+    <h3>Select algorithm-specific hyper-parameters that need to be tuned</h3>
         <label class="checkbox-inline col-xs-3">
             <input type="checkbox" id="maxk" value="maxk"> maxk
         </label>
@@ -46,22 +46,30 @@
         <label class="checkbox-inline col-xs-3">
             <input type="checkbox" id="kl_reg" value="kl_reg"> kl regularization
         </label>
-    <div id='ass'>
+    <form onsubmit="return false">
+    <div id='holder'> 
 
     </div>
     <div class="col-xs-12">
-        <button class="btn btn-default btn-lg" id="bt2" disabled>Submit</button>
-        <button class="btn btn-primary btn-lg" id="bt3" disabled>Generate</button>
+        <button class="btn btn-default btn-lg" id="bt2">Submit</button>
+        <button class="btn btn-primary btn-lg hidden" id="bt3" type="submit">Generate</button>
     </div>
+    </form>
 </div>
-<div class="container" style="padding-bottom: 50px;">
+<div class="container hidden" id="tune_command_div" style="padding-bottom: 50px;">
     <h2 class='alert alert-info'>hpo_tuner.py Script Command Result</h2>
     <div class="jumbotro">
         <textarea id='res' class="form-control" rows='8' style="resize: none"></textarea>
     </div>
 </div>
+<div class="col-xs-12">
+    <button class="btn btn-default btn-lg hidden" id="bt4">Restart</button>
+</div>
 
 <script>
+    var int_list = ["batch_size", "factors", "num_layers", "num_ng", "maxk" ];
+    var selected_list = []
+
     function contain(str, substr) {
         return new RegExp(substr).test(str);
     }
@@ -83,25 +91,40 @@
         return param_list
     }
 
-    function add_param_info(param_name) {
-        $('#ass').append(
+    function add_param_info(param_name, int_list) {
+        if (int_list.indexOf(param_name) > -1){
+            $('#holder').append(
             '<h3 class="col-xs-12">' + param_name + '</h3>' +
-            '<div class="form-group col-xs-3"><label>Type of Parameter</label>' +
+            '<div id="'+ param_name +'_div"><div class="form-group col-xs-3"><label>Type of Parameter</label>' +
             '<select class="form-control" id="' + param_name + '_tp">' +
-            '<option>int choice</option><option>float choice</option>' +
-            '<option>int</option><option>float</option></select></div>' +
+            '<option id="1" value="1">int</option><option id="2" value="2">int choice</option></select></div>' +
             '<div class="form-group col-xs-3"><label>Min. Value</label>' +
-            '<input class="form-control" type="text" id="' + param_name + '_min"></div>' +
+            '<input class="form-control" type="text" id="' + param_name + '_min" pattern="[1-9]\\d*" placeholder="e.g., 1" required="required"></div>' +
             '<div class="form-group col-xs-3"><label>Max. Value</label>' +
-            '<input class="form-control" type="text" id="' + param_name + '_max"></div>' +
-            '<div class="form-group col-xs-3"><label>choice set or step size</label>' +
-            '<input class="form-control" type="text" id="' + param_name + '_sp"></div>'
-        )
+            '<input class="form-control" type="text" id="' + param_name + '_max" pattern="[1-9]\\d*" placeholder="e.g., 10" required="required"></div>' +
+            '<div class="form-group col-xs-3"><label>step size</label>' +
+            '<input class="form-control" type="text" id="' + param_name + '_sp" pattern="[1-9]\\d*" placeholder="e.g., 1" required="required"></div></div>')
+        }else{
+            $('#holder').append(
+            '<h3 class="col-xs-12">' + param_name + '</h3>' +
+            '<div id="'+ param_name +'_div"><div class="form-group col-xs-3"><label>Type of Parameter</label>' +
+            '<select class="form-control" id="' + param_name + '_tp">' +
+            '<option id="1" value="1">float</option><option id="2" value="2">float choice</option></select></div>' +
+            '<div class="form-group col-xs-3"><label>Min. Value</label>' +
+            '<input class="form-control" type="text" id="' + param_name + '_min" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required"></div>' +
+            '<div class="form-group col-xs-3"><label>Max. Value</label>' +
+            '<input class="form-control" type="text" id="' + param_name + '_max" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 1.0" required="required"></div>' +
+            '<div class="form-group col-xs-3"><label>step size</label>' +
+            '<input class="form-control" type="text" id="' + param_name + '_sp" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required"></div></div>')
+        }
+        
     }
+
 
     $(document).ready(function(){
         $('#bt1').click(function(){
-            $('#bt2').attr('disabled', false)
+            $('#specific_setting_div_tune').removeClass("hidden")
+            $('#tune_command_div').removeClass("hidden")
             switch($('#algo_name').val()) {
                 case 'multi-vae':
                     $('#batch_size').parent().show()
@@ -118,7 +141,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'cdae':
                     $('#batch_size').parent().show()
@@ -135,7 +158,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'item2vec':
                     break
@@ -172,7 +195,7 @@
                     $('#elastic').parent().show()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'pop':
                     break
@@ -191,7 +214,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'fm':
                     $('#batch_size').parent().show()
@@ -208,7 +231,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'neumf':
                     $('#batch_size').parent().show()
@@ -225,7 +248,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'afm':
                     break
@@ -244,7 +267,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'deepfm':
                     break
@@ -263,7 +286,7 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().hide()
                     $('#mess_dropout').parent().hide()
-                    $('#ass').empty()
+                    $('#holder').empty()
                     break
                 case 'ngcf':
                     $('#batch_size').parent().show()
@@ -280,25 +303,80 @@
                     $('#elastic').parent().hide()
                     $('#node_dropout').parent().show()
                     $('#mess_dropout').parent().show()
-                    $('#ass').empty()
+                    $('#holder').empty()
             }
 
         })
 
 
         $('#bt2').click(function() {
-            param_list = check_param()
-            // console.log(param_list)
-            $('#ass').empty()
-            for(i = 0;i < param_list.length;i++) {
-                add_param_info(param_list[i])
-            }
-
-            if (param_list.length > 0) {
-                $('#bt3').attr('disabled', false)
-            }
-
+                param_list = check_param()
+                $('#bt3').removeClass('hidden')
+                $('#holder').empty()
+                for(i = 0;i < param_list.length;i++) {
+                add_param_info(param_list[i], int_list)
+                }
+                
+                for (i=0; i<param_list.length; i++){
+                    console.log(i)
+                    $('#' + param_list[i] + '_tp').change(function(){
+                        console.log("change")
+                        if($(this).children('option:selected').val() == 2){
+                            console.log($(this).parent().parent().attr('id'))
+                            var parent_id = $(this).parent().parent().attr('id')
+                            prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            $('#'+ prefix_name + '_min').parent().hide()
+                            $('#'+ prefix_name + '_max').parent().hide()
+                            $('#'+ prefix_name + '_sp').parent().hide()
+                            // $('#'+ parent_id).empty()
+                            if ($('#' + prefix_name + '_choice').attr('id') == null){
+                                // console.log($('#' + prefix_name + '_tp').find("option:selected").text())
+                                if($('#' + prefix_name + '_tp').find("option:selected").text() == "int choice"){
+                                    $('#'+ parent_id).append('<div class="form-group col-xs-3"><label>Choice set</label>' +
+                                                        '<input class="form-control" type="text" id="' + prefix_name + '_choice" pattern="^\\d+(,\\d+)*$"'+ 
+                                                        'placeholder="e.g., 1,2,3" required="required"></div>')
+                                }
+                                else{
+                                    $('#'+ parent_id).append('<div class="form-group col-xs-3"><label>Choice set</label>' +
+                                                        '<input class="form-control" type="text" id="' + prefix_name + '_choice" pattern="^(\\d*\.*\\d*,?)+\\d$"' + 
+                                                        'placeholder="e.g., 0.1,0.2,0.3" required="required"></div>')
+                                }
+                                
+                            }
+                            else{
+                                $('#'+ prefix_name + '_choice').parent().show()
+                            }
+                            
+                             
+                        }
+                        else if($(this).children('option:selected').val() == 1){
+                            console.log($(this).parent().parent().attr('id'))
+                            var parent_id = $(this).parent().parent().attr('id')
+                            prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            $('#'+ prefix_name + '_min').parent().show()
+                            $('#'+ prefix_name + '_max').parent().show()
+                            $('#'+ prefix_name + '_sp').parent().show()
+                            $('#'+ prefix_name + '_choice').parent().hide()
+                            
+                             
+                        }
+                    })
+                }          
         })
+        
+        // for (i=0; i<selected_list.length; i++){
+        //     console.log(i)
+        //     $('#' + param_list[i]).change(function(){
+        //         console.log("change")
+        //         if($(this).children('option:selected').val() == 2){
+        //             console.log("selected")
+        //             $('#holder').remove($('#'+ param_list[i] + '_min').parent())
+        //             $('#holder').remove($('#'+ param_list[i] + '_max').parent())
+        //             $('#holder').remove($('#'+ param_list[i] + '_sp').parent())
+        //         }
+        //     })
+        // }
+
 
         $('#bt3').click(function() {
             base = 'python hpo_tuner.py'
@@ -341,71 +419,147 @@
             // base += ' --init_method=' + tmp
             tmp = $('#gpu').val()
             base += ' --gpu=' + tmp
+
             tmp = $('#loss_type').val()
             tmp = tmp.split(' ')[0]
             base += ' --loss_type=' + tmp
 
+            tmp = $('#init_method').val()
+            base += ' --initializer=' + tmp
+
+            tmp = $('#optimizer').val()
+            base += ' --optimizer=' + tmp
+
+            tmp = $('#early_stop').val()
+            if(tmp =='false'){
+                base += ' --early_stop'
+            }
+
             param_dict = {}
 
             param_list = check_param()
+            var empty_is_valid = true
+            var data_is_valid = true
             for(i = 0;i < param_list.length;i++) {
                 pn = param_list[i]
                 console.log(pn)
-                tp = $('#' + pn + '_tp').val()
+                tp = $('#' + pn + '_tp').find("option:selected").text()
 
                 if(contain(tp, 'choice')){
                     if(contain(tp, 'int')) {
-                        min = $('#' + pn + '_min').val().trim()
-                        max = $('#' + pn + '_max').val().trim()
-                        min = parseInt(min)
-                        max = parseInt(max)
-                        fnl_cs = $('#' + pn + '_sp').val().split(',')
-                        for(j = 0;j < fnl_cs.length;j++){
-                            fnl_cs[j] = parseInt(fnl_cs[j].trim())
+                        // min = $('#' + pn + '_min').val().trim()
+                        // max = $('#' + pn + '_max').val().trim()
+                        // if(min == "" || max == ""){
+                        //     empty_is_valid = empty_is_valid && false
+                        // }
+                        // if(!(/^\d+(,\d+)*$/.test(min) && /^\d+(,\d+)*$/.test(max))){
+                        //     data_is_valid = data_is_valid && false
+                        // }
+                        // min = parseInt(min)
+                        // max = parseInt(max)
+                        // if(min > max){
+                        //     empty_is_valid = empty_is_valid && false
+                        //     alert("Min value must be less than Max value.")
+                        // }
+                        cs = $('#' + pn + '_choice').val().trim()
+                        if(/^\d+(,\d+)*$/.test(cs)){
+                            fnl_cs = $('#' + pn + '_choice').val().split(',')
+                            for(j = 0;j < fnl_cs.length;j++){
+                                fnl_cs[j] = parseInt(fnl_cs[j].trim())
+                            }
                         }
-
-                        param_dict[pn] = [min, max, fnl_cs, 'choice']
+                        else{
+                            data_is_valid = data_is_valid && false
+                        }
+                        if(cs == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        param_dict[pn] = [fnl_cs, 'choice']
                     } else {
-                        min = $('#' + pn + '_min').val().trim()
-                        max = $('#' + pn + '_max').val().trim()
-                        min = parseFloat(min)
-                        max = parseFloat(max)
-                        fnl_cs = $('#' + pn + '_sp').val().split(',')
-                        for(j = 0;j < fnl_cs.length;j++){
-                            fnl_cs[j] = parseFloat(fnl_cs[j].trim())
+                        // min = $('#' + pn + '_min').val().trim()
+                        // max = $('#' + pn + '_max').val().trim()
+                        // if(min == "" || max == ""){
+                        //     empty_is_valid = empty_is_valid && false
+                        // }
+                        // if(!(/^(\d*\.*\d*,?)+\d$/.test(min) && /^(\d*\.*\d*,?)+\d$/.test(max))){
+                        //     data_is_valid = data_is_valid && false
+                        // }
+                        // min = parseFloat(min)
+                        // max = parseFloat(max)
+                        // if(min > max){
+                        //     empty_is_valid = empty_is_valid && false
+                        //     alert("Min value must be less than Max value.")
+                        // }
+                        cs = $('#' + pn + '_choice').val().trim()
+                        if(/^(\d*\.*\d*,?)+\d/.test(cs)){
+                            fnl_cs = $('#' + pn + '_choice').val().split(',')
+                            for(j = 0;j < fnl_cs.length;j++){
+                                fnl_cs[j] = parseFloat(fnl_cs[j].trim())
+                            }
                         }
-                        param_dict[pn] = [min, max, fnl_cs, 'choice']
+                        if(cs == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        param_dict[pn] = [fnl_cs, 'choice']
                     }
                 } else {
                     if(contain(tp, 'int')){
                         min = $('#' + pn + '_min').val().trim()
                         max = $('#' + pn + '_max').val().trim()
+                        if(min == "" || max == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        if(!(/[1-9]\d*/.test(min) && /[1-9]\d*/.test(max))){
+                            data_is_valid = data_is_valid && false
+                        }
                         min = parseInt(min)
                         max = parseInt(max)
-                        sp = $('#' + pn + '_sp').val().trim()
-                        if(sp.length == 0) {
-                            param_dict[pn] = [min, max, 0, 'int']
-                        } else {
-                            param_dict[pn] = [min, max, parseFloat(sp), 'int']
+                        if(min > max){
+                            empty_is_valid = empty_is_valid && false
+                            alert("Min value must be less than Max value.")
                         }
+                        sp = $('#' + pn + '_sp').val().trim()
+                        if(sp == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        if(!(/[1-9]\d*/.test(sp))){
+                            data_is_valid = data_is_valid && false
+                        }
+                        param_dict[pn] = [min, max, parseFloat(sp), 'int']
+        
                     } else {
                         min = $('#' + pn + '_min').val()
                         max = $('#' + pn + '_max').val()
+                        if(min == "" || max == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        if(!(/[1-9]\d*.\d*|0.\d*[1-9]\d*/.test(min) && /[1-9]\d*.\d*|0.\d*[1-9]\d*/.test(max))){
+                            data_is_valid = data_is_valid && false
+                        }
                         min = parseFloat(min)
                         max = parseFloat(max)
-                        sp = $('#' + pn + '_sp').val().trim()
-                        if(sp.length == 0) {
-                            param_dict[pn] = [min, max, 0, 'float']
-                        } else {
-                            param_dict[pn] = [min, max, parseFloat(sp), 'float']
+                        if(min > max){
+                            empty_is_valid = empty_is_valid && false
+                            alert("Min value must be less than Max value.")
                         }
+                        sp = $('#' + pn + '_sp').val().trim()
+                        if(sp == ""){
+                            empty_is_valid = empty_is_valid && false
+                        }
+                        if(!(/[1-9]\d*.\d*|0.\d*[1-9]\d*/.test(sp))){
+                            data_is_valid = data_is_valid && false
+                        }
+                        param_dict[pn] = [min, max, parseFloat(sp), 'float']
                     }
                 }
             }
 
             param_dict_str = JSON.stringify(param_dict)
             base += ' --tune_pack=' + "'''" + param_dict_str + "'''"
-            $('#res').val(base)
+            if(empty_is_valid && data_is_valid){
+                $('#res').val(base)
+            }
+            // window.event.returnValue = false
         })
 
     })

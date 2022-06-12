@@ -14,19 +14,33 @@
 </head>
 <body>
     <div class="container" style="padding-top: 50px;">
-        <ol class='breadcrumb'>       
+        <h2 class='alert alert-info'> DaisyRec-v2.0 GUI Command Generator</h2>
+        <!-- <ol class='breadcrumb'> 
+            <li><a href="/tune_command">tune_command</a></li>
+            <li><a href="/test_command">test_command</a></li>
+        </ol> -->
+        <ol> 
+            <h3><li><a href="/tune_command">tune_command</a></li></h3>
+            <h3><li><a href="/test_command">test_command</a></li></h3>
+        </ol>
+        <!-- <ul> 
+            <li><a href="/tune_command">tune_command</a></li>
+            <li><a href="/test_command">test_command</a></li>
+        </ul> -->
+        <!-- <ol class='breadcrumb'>       
             <li>DaisyRec</li>
             <li><a href="/tune_command">tune_command</a></li>
             <li><a href="/test_command">test_command</a></li>
-            <!-- <li><a href="/main">main</a></li>
-            <li><a href="/hpo_tuner">hpo_tuner</a></li> -->
-        </ol>
+            <li><a href="/main">main</a></li>
+            <li><a href="/hpo_tuner">hpo_tuner</a></li>
+        </ol> -->
         <hr>
         <div id='bs'>
             <h2 class='alert alert-info'>Basic Settings</h2>
             <form action="" method="post" novalidate="novalidate">
+            
                 <div class="form-group col-xs-6">
-                    <label>Score metric</label>
+                    <label>Optimization Metric</label>
                     <select class='form-control' id='score_metric'>
                         {% for sc in score_metric %}
                         <option value="{{sc.name}}">{{sc.name}}</option>
@@ -35,7 +49,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Tune Epochs</label>
+                    <label>Trails of Bayesian HyperOpt</label>
                     <input type='text' class="form-control" id="tune_epochs" value='30'>
                 </div>
 
@@ -49,7 +63,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Algorithm Name</label>
+                    <label>Algorithm</label>
                     <select class='form-control' id='algo_name'>
                         {% for an in algo_name %}
                         <option id="{{an.name}}" value="{{an.name}}">{{an.name}}</option>
@@ -76,11 +90,6 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Top-K number</label>
-                    <input type='text' class="form-control" id="topk" value='50'>
-                </div>
-
-                <div class="form-group col-xs-6">
                     <label>Test Method</label>
                     <select class='form-control' id='test_method'>
                         {% for tm in test_methods %}
@@ -99,22 +108,28 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Test Size</label>
+                    <label title="in the range of (0,1), e.g., 0.2 means retaining 20% of the data as test set">Test Size*</label> 
                     <input type='text' class="form-control" id="test_size" value='0.2'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Validation Size</label>
-                    <input type='text' class="form-control" id="val_size" value='0.1'>
+                    <label title="in the range of (0,1), e.g., 0.1 means retaining 10% of the training set as validatiaon set">Validation Size*</label>
+                    <!-- <label >Validation Size</label> -->
+                    <input type='text' class="form-control" id="val_size" value='0.1' >
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Fold Number</label>
+                    <label>Top-K number</label>
+                    <input type='text' class="form-control" id="topk" value='50'>
+                </div>
+
+                <div class="form-group col-xs-6">
+                    <label>Fold Number</label> (for cross-validation)
                     <input type='text' class="form-control" id="fold_num" value='5'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Candidates Number</label>
+                    <label>Candidate Number of Test set</label>
                     <input type='text' class="form-control" id="cand_num" value='1000'>
                 </div>
 
@@ -128,12 +143,12 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Sample Ratio</label>
+                    <label>Ratio of Uniform Sampling</label>
                     <input type='text' class="form-control" id="sample_ratio" value='0'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Weight Initializartion Method</label>
+                    <label>Initialziation Methods</label>
                     <!--<input type='text' class="form-control" id="init_method" value=''>-->
                     <select class='form-control' id='init_method'>
                         {% for im in weight_initializer %}
@@ -142,6 +157,24 @@
                     </select>
                 </div>
                 
+                <div class="form-group col-xs-6">
+                    <label>Optimizer</label>
+                    <select class='form-control' id='optimizer'>
+                        {% for op in optimizer %}
+                        <option id="{{op.name}}" value="{{op.name}}">{{op.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group col-xs-6">
+                    <label>Early stop</label>
+                    <select class='form-control' id='early_stop'>
+                        {% for es in early_stop %}
+                        <option id="{{es.name}}" value="{{es.name}}">{{es.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
                 <div class="form-group col-xs-6">
                     <label>GPU ID</label>
                     <input type='text' class="form-control" id="gpu" value='0'>
@@ -159,6 +192,7 @@
                     </select>
                 </div>            
             </form>
+            <h5>&nbsp&nbsp&nbsp * represents you can place the mouse on the parameter to understand its meaning</h5>
             <div class="col-xs-12"><button class="btn btn-default btn-lg" id='bt1'>Submit</button></div>
         </div>
 

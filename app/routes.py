@@ -21,7 +21,7 @@ algo_name = [
     {'name': 'nfm'},
     {'name': 'neumf'},
     {'name': 'itemknn'},
-    {'name': 'pop'},
+    {'name': 'mostpop'},
     {'name': 'slim'},
     {'name': 'puresvd'}
 ]
@@ -51,10 +51,10 @@ test_methods = [
     {'name': 'rsbr (random split-by-ratio)'},
 ]
 val_methods = [
-    {'name': 'tloo'},
-    {'name': 'loo'},
     {'name': 'tsbr'},
     {'name': 'rsbr'},
+    {'name': 'tloo'},
+    {'name': 'loo'},
 
 ]
 sample_methods = [
@@ -79,15 +79,34 @@ weight_initializer = [
 optimizer = [
     {'name': 'sgd'},
     {'name': 'adam'},
-    {'name': 'adagrad'},
 ]
 
 early_stop = [
-    {'name': True},
-    {'name': False},
+    {'name': 'true'},
+    {'name': 'false'},
 ]
 
 @app.route('/')
+@app.route('/tune_command')
+def hpo_tuner():
+    user = {'username':'Daisy'}
+    return render_template(
+        'tune_command.html', 
+        user=user, 
+        score_metric=score_metric,
+        problem_type=problem_type,
+        algo_name=algo_name,
+        dataset_name=dataset_name,
+        preprocess_methods=preprocess_methods,
+        test_methods=test_methods,
+        val_methods=val_methods,
+        sample_methods=sample_methods,
+        loss_types=loss_types,
+        weight_initializer=weight_initializer,
+        optimizer=optimizer,
+        early_stop=early_stop
+    )
+
 @app.route('/test_command')
 def main():
     user = {'username':'Daisy'}
@@ -105,23 +124,7 @@ def main():
         val_methods=val_methods,
         sample_methods=sample_methods,
         loss_types=loss_types,
-        weight_initializer=weight_initializer
-    )
-
-@app.route('/tune_command')
-def hpo_tuner():
-    user = {'username':'Daisy'}
-    return render_template(
-        'tune_command.html', 
-        user=user, 
-        score_metric=score_metric,
-        problem_type=problem_type,
-        algo_name=algo_name,
-        dataset_name=dataset_name,
-        preprocess_methods=preprocess_methods,
-        test_methods=test_methods,
-        val_methods=val_methods,
-        sample_methods=sample_methods,
-        loss_types=loss_types,
         weight_initializer=weight_initializer,
+        optimizer=optimizer,
+        early_stop=early_stop
     )
