@@ -8,16 +8,16 @@
             <input type="checkbox" id="maxk" value="maxk"> maxk
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="alpha" value="alpha"> alpha
+            <input type="checkbox" id="alpha" value="alpha" >alpha
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="elastic" value="elastic"> elastic
+            <input type="checkbox" id="elastic" value="elastic" > elastic
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="batch_size" value="batch_size"> batch size
+            <input type="checkbox" id="batch_size" value="batch_size"> batch_size
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="dropout" value="dropout"> dropout rate
+            <input type="checkbox" id="dropout" value="dropout"> dropout
         </label>
         <label class="checkbox-inline col-xs-3">
             <input type="checkbox" id="node_dropout" value="node_dropout"> node_dropout
@@ -29,22 +29,22 @@
             <input type="checkbox" id="factors" value="factors"> factors
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="lr" value="lr"> learning rate
+            <input type="checkbox" id="lr" value="lr"> lr
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="num_layers" value="num_layers"> number of layers
+            <input type="checkbox" id="num_layers" value="num_layers"> num_layers
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="num_ng" value="num_ng"> number of negative samplings
+            <input type="checkbox" id="num_ng" value="num_ng" > num_ng
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="reg_1" value="reg_1"> l1 regularization
+            <input type="checkbox" id="reg_1" value="reg_1" > reg_1
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="reg_2" value="reg_2"> l2 regularization
+            <input type="checkbox" id="reg_2" value="reg_2" > reg_2
         </label>
         <label class="checkbox-inline col-xs-3">
-            <input type="checkbox" id="kl_reg" value="kl_reg"> kl regularization
+            <input type="checkbox" id="kl_reg" value="kl_reg" > kl_reg
         </label>
     <form onsubmit="return false">
     <div id='holder'> 
@@ -380,16 +380,14 @@
 
         $('#bt3').click(function() {
             base = 'python hpo_tuner.py'
-            tmp = $('#score_metric').val()
-            base += ' --score_metric=' + tmp
-            tmp = $('#tune_epochs').val()
-            base += ' --tune_epochs=' + tmp
+            tmp = $('#optimization_metric').val()
+            base += ' --optimization_metric=' + tmp
+            tmp = $('#hyperopt_trail').val()
+            base += ' --hyperopt_trail=' + tmp
             tmp = $('#problem_type').val()
+            tmp = tmp.split('-')[0]
             base += ' --problem_type=' + tmp
             tmp = $('#algo_name').val()
-            if (tmp == 'multi-vae'){
-                tmp = 'vae'
-            }
             base += ' --algo_name=' + tmp
             tmp = $('#dataset').val()
             base += ' --dataset=' + tmp
@@ -401,6 +399,7 @@
             tmp = tmp.split(' ')[0]
             base += ' --test_method=' + tmp
             tmp = $('#val_method').val()
+            tmp = tmp.split(' ')[0]
             base += ' --val_method=' + tmp
             tmp = $('#test_size').val()
             base += ' --test_size=' + tmp
@@ -425,7 +424,7 @@
             base += ' --loss_type=' + tmp
 
             tmp = $('#init_method').val()
-            base += ' --initializer=' + tmp
+            base += ' --init_method=' + tmp
 
             tmp = $('#optimizer').val()
             base += ' --optimizer=' + tmp
@@ -555,7 +554,7 @@
             }
 
             param_dict_str = JSON.stringify(param_dict)
-            base += ' --tune_pack=' + "'''" + param_dict_str + "'''"
+            base += ' --hyperopt_pack=' + "'''" + param_dict_str + "'''"
             if(empty_is_valid && data_is_valid){
                 $('#res').val(base)
             }

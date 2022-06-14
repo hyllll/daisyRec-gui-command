@@ -10,8 +10,8 @@ score_metric = [
     {'name': 'mrr'},
 ]
 problem_type = [
-    {'name': 'point'},
-    {'name': 'pair'},
+    {'name': 'point-wise'},
+    {'name': 'pair-wise'},
 ]
 algo_name = [
     {'name': 'multi-vae'},
@@ -31,7 +31,7 @@ dataset_name = [
     {'name': 'ml-10m'},
     {'name': 'netflix'},
     {'name': 'lastfm'},
-    {'name': 'bx'},
+    {'name': 'book-x'},
     {'name': 'amazon-cloth'},
     {'name': 'amazon-book'},
     {'name': 'amazon-music'},
@@ -45,40 +45,42 @@ preprocess_methods = [
     {'name': '10filter'},
 ]
 test_methods = [
-    {'name': 'tloo (time-aware leave-one-out)'},
-    {'name': 'rloo (random leave-one-out)'},
     {'name': 'tsbr (time-aware split-by-ratio)'},
     {'name': 'rsbr (random split-by-ratio)'},
+    {'name': 'tloo (time-aware leave-one-out)'},
+    {'name': 'rloo (random leave-one-out)'},
 ]
 val_methods = [
-    {'name': 'tsbr'},
-    {'name': 'rsbr'},
-    {'name': 'tloo'},
-    {'name': 'loo'},
+    {'name': 'tsbr (time-aware split-by-ratio)'},
+    {'name': 'rsbr (random split-by-ratio)'},
+    {'name': 'tloo (time-aware leave-one-out)'},
+    {'name': 'rloo (random leave-one-out)'},
 
 ]
 sample_methods = [
     {'name': 'uniform (uniformly sample)'},
-    {'name': 'item-ascd (sampling popular items with low rank)'},
-    {'name': 'item-desc (sampling popular item with high rank)'},
+    {'name': 'low-pop (sampling popular items with low rank)'},
+    {'name': 'high-pop (sampling popular item with high rank)'},
 ]
 loss_types = [
     {'name': 'CL (Cross-entropy Loss)'},
     {'name': 'BPR (BPR Loss)'},
     {'name': 'HL (Hinge Loss)'},
     {'name': 'TL (Top-1 Loss)'},
+    {'name': 'SL (Square error loss)'}
 ]
 
 weight_initializer = [
-    {'name': 'xavier_normal'},
     {'name': 'normal'},
     {'name': 'uniform'},
+    {'name': 'xavier_normal'},
     {'name': 'xavier_uniform'}
 ]
 
 optimizer = [
     {'name': 'sgd'},
     {'name': 'adam'},
+    {'name': 'adagrad'},
 ]
 
 early_stop = [

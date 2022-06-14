@@ -14,18 +14,25 @@
 </head>
 <body>
     <div class="container" style="padding-top: 50px;">
-        <h2 class='alert alert-info'> DaisyRec-v2.0 GUI Command Generator</h2>
+        <!-- <h2 class='alert alert-info'> DaisyRec-v2.0 GUI Command Generator</h2> -->
+        <h2 style="text-align: center;"> DaisyRec-v2.0 GUI Command Generator</h2>
         <!-- <ol class='breadcrumb'> 
             <li><a href="/tune_command">tune_command</a></li>
             <li><a href="/test_command">test_command</a></li>
         </ol> -->
-        <ol> 
+        <!-- <ol> 
             <h3><li><a href="/tune_command">tune_command</a></li></h3>
             <h3><li><a href="/test_command">test_command</a></li></h3>
-        </ol>
-        <!-- <ul> 
-            <li><a href="/tune_command">tune_command</a></li>
-            <li><a href="/test_command">test_command</a></li>
+        </ol> -->
+        <div style="text-align: center;">
+        <ul style="display:flex; list-style:none;" > 
+            <h3><li style="padding-right: 50pt;"><a href="/tune_command">tune_command</a></li></h3>
+            <h3><li ><a href="/test_command">test_command</a></li></h3>
+        </ul>
+        </div>
+        <!-- <ul class=" list-unstyled list-inline list-group"> 
+            <h3><li class="list-group-item lr_maringin5" ><a href="/tune_command">tune_command</a></li></h3>
+            <h3><li class="list-group-item lr_maringin5" ><a href="/test_command">test_command</a></li></h3>
         </ul> -->
         <!-- <ol class='breadcrumb'>       
             <li>DaisyRec</li>
@@ -40,8 +47,8 @@
             <form action="" method="post" novalidate="novalidate">
             
                 <div class="form-group col-xs-6">
-                    <label>Optimization Metric</label>
-                    <select class='form-control' id='score_metric'>
+                    <label>optimization_metric</label>
+                    <select class='form-control' id='optimization_metric'>
                         {% for sc in score_metric %}
                         <option value="{{sc.name}}">{{sc.name}}</option>
                         {% endfor %}
@@ -49,12 +56,12 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Trails of Bayesian HyperOpt</label>
-                    <input type='text' class="form-control" id="tune_epochs" value='30'>
+                    <label>hyperopt_trail</label>
+                    <input type='text' class="form-control" id="hyperopt_trail" value='30'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Problem Type</label>
+                    <label>problem_type</label>
                     <select class='form-control' id='problem_type'>
                         {% for pt in problem_type %}
                         <option value="{{pt.name}}">{{pt.name}}</option>
@@ -63,7 +70,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Algorithm</label>
+                    <label>algo_name</label>
                     <select class='form-control' id='algo_name'>
                         {% for an in algo_name %}
                         <option id="{{an.name}}" value="{{an.name}}">{{an.name}}</option>
@@ -72,7 +79,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Dataset Name</label>
+                    <label>dataset</label>
                     <select class='form-control' id='dataset'>
                         {% for dn in dataset_name %}
                         <option id="{{dn.name}}" value="{{dn.name}}">{{dn.name}}</option>
@@ -81,7 +88,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Preprocess Method</label>
+                    <label title="the data pre-processing strategy">prepro*</label>
                     <select class='form-control' id='preprocess'>
                         {% for pm in preprocess_methods %}
                         <option id="{{pm.name}}" value="{{pm.name}}">{{pm.name}}</option>
@@ -90,7 +97,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Test Method</label>
+                    <label>test_method</label>
                     <select class='form-control' id='test_method'>
                         {% for tm in test_methods %}
                         <option id="{{tm.name}}" value="{{tm.name}}">{{tm.name}}</option>
@@ -99,7 +106,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Validation Method</label>
+                    <label>val_method</label>
                     <select class='form-control' id='val_method'>
                         {% for vm in val_methods %}
                         <option id="{{vm.name}}" value="{{vm.name}}">{{vm.name}}</option>
@@ -108,33 +115,33 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label title="in the range of (0,1), e.g., 0.2 means retaining 20% of the data as test set">Test Size*</label> 
+                    <label title="in the range of (0,1), e.g., 0.2 means retaining 20% of the data as test set">test_size*</label> 
                     <input type='text' class="form-control" id="test_size" value='0.2'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label title="in the range of (0,1), e.g., 0.1 means retaining 10% of the training set as validatiaon set">Validation Size*</label>
+                    <label title="in the range of (0,1), e.g., 0.1 means retaining 10% of the training set as validatiaon set">val_size*</label>
                     <!-- <label >Validation Size</label> -->
                     <input type='text' class="form-control" id="val_size" value='0.1' >
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Top-K number</label>
+                    <label>topk</label>
                     <input type='text' class="form-control" id="topk" value='50'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Fold Number</label> (for cross-validation)
+                    <label title="the fold number of cross-validation">fold_num*</label>
                     <input type='text' class="form-control" id="fold_num" value='5'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Candidate Number of Test set</label>
+                    <label title="the number of candidate items used for ranking">cand_num*</label>
                     <input type='text' class="form-control" id="cand_num" value='1000'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Sample Method</label>
+                    <label>sample_method</label>
                     <select class='form-control' id='sample_method'>
                         {% for sm in sample_methods %}
                         <option id="{{sm.name}}" value="{{sm.name}}">{{sm.name}}</option>
@@ -143,12 +150,12 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Ratio of Uniform Sampling</label>
+                    <label title="in the range of (0,1); control the ratio of popularity sampling for the hybrid sampling strategy, e.g., for the hybrid sampling strategy uniform+low-pop, –sample_ratio=0.1 means 10% of the negative items are sampled via low-pop">sample_ratio*</label>
                     <input type='text' class="form-control" id="sample_ratio" value='0'>
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Initialziation Methods</label>
+                    <label>init_method</label>
                     <!--<input type='text' class="form-control" id="init_method" value=''>-->
                     <select class='form-control' id='init_method'>
                         {% for im in weight_initializer %}
@@ -158,7 +165,7 @@
                 </div>
                 
                 <div class="form-group col-xs-6">
-                    <label>Optimizer</label>
+                    <label>optimizer</label>
                     <select class='form-control' id='optimizer'>
                         {% for op in optimizer %}
                         <option id="{{op.name}}" value="{{op.name}}">{{op.name}}</option>
@@ -167,7 +174,7 @@
                 </div>
                 
                 <div class="form-group col-xs-6">
-                    <label>Early stop</label>
+                    <label>early_stop</label>
                     <select class='form-control' id='early_stop'>
                         {% for es in early_stop %}
                         <option id="{{es.name}}" value="{{es.name}}">{{es.name}}</option>
@@ -176,7 +183,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>GPU ID</label>
+                    <label>gpu</label>
                     <input type='text' class="form-control" id="gpu" value='0'>
                 </div>
                 <!-- <div class="form-group col-xs-6">
@@ -184,7 +191,7 @@
                     <input type='text' class="form-control" id="num_ng" value='0'>
                 </div> -->
                 <div class="form-group col-xs-6">
-                    <label>Loss Function Type</label>
+                    <label>loss_type</label>
                     <select class='form-control' id='loss_type'>
                         {% for lt in loss_types %}
                         <option id="{{lt.name}}" value="{{lt.name}}">{{lt.name}}</option>
