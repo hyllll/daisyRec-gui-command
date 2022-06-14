@@ -98,7 +98,7 @@
             '<div id="'+ param_name +'_div"><div class="form-group col-xs-3"><label>Type of Parameter</label>' +
             '<select class="form-control" id="' + param_name + '_tp">' +
             '<option id="1" value="1">int</option><option id="2" value="2">int choice</option></select></div>' +
-            '<div class="form-group col-xs-3"><label>Min. Value</label>' +
+            '<div class="form-group col-xs-3"><label title="could be a small value but cannot be 0">Min. Value*</label>' +
             '<input class="form-control" type="text" id="' + param_name + '_min" pattern="[1-9]\\d*" placeholder="e.g., 1" required="required"></div>' +
             '<div class="form-group col-xs-3"><label>Max. Value</label>' +
             '<input class="form-control" type="text" id="' + param_name + '_max" pattern="[1-9]\\d*" placeholder="e.g., 10" required="required"></div>' +
@@ -110,12 +110,10 @@
             '<div id="'+ param_name +'_div"><div class="form-group col-xs-3"><label>Type of Parameter</label>' +
             '<select class="form-control" id="' + param_name + '_tp">' +
             '<option id="1" value="1">float</option><option id="2" value="2">float choice</option></select></div>' +
-            '<div class="form-group col-xs-3"><label>Min. Value</label>' +
+            '<div class="form-group col-xs-3"><label title="could be a small value but cannot be 0">Min. Value*</label>' +
             '<input class="form-control" type="text" id="' + param_name + '_min" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required"></div>' +
             '<div class="form-group col-xs-3"><label>Max. Value</label>' +
-            '<input class="form-control" type="text" id="' + param_name + '_max" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 1.0" required="required"></div>' +
-            '<div class="form-group col-xs-3"><label>step size</label>' +
-            '<input class="form-control" type="text" id="' + param_name + '_sp" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 0.1" required="required"></div></div>')
+            '<input class="form-control" type="text" id="' + param_name + '_max" pattern="[1-9]\\d*.\\d*|0.\\d*[1-9]\\d*" placeholder="e.g., 1.0" required="required"></div>')
         }
         
     }
@@ -324,7 +322,12 @@
                         if($(this).children('option:selected').val() == 2){
                             console.log($(this).parent().parent().attr('id'))
                             var parent_id = $(this).parent().parent().attr('id')
-                            prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            if(parent_id.split('_')[1]=='div'){
+                                prefix_name = parent_id.split('_')[0]
+                            }
+                            else{
+                                prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            }
                             $('#'+ prefix_name + '_min').parent().hide()
                             $('#'+ prefix_name + '_max').parent().hide()
                             $('#'+ prefix_name + '_sp').parent().hide()
@@ -352,7 +355,11 @@
                         else if($(this).children('option:selected').val() == 1){
                             console.log($(this).parent().parent().attr('id'))
                             var parent_id = $(this).parent().parent().attr('id')
-                            prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            if(parent_id.split('_')[1] == 'div'){
+                                prefix_name = parent_id.split('_')[0]
+                            }else{
+                                prefix_name = parent_id.split('_')[0] + '_' + parent_id.split('_')[1]
+                            }
                             $('#'+ prefix_name + '_min').parent().show()
                             $('#'+ prefix_name + '_max').parent().show()
                             $('#'+ prefix_name + '_sp').parent().show()
@@ -541,14 +548,7 @@
                             empty_is_valid = empty_is_valid && false
                             alert("Min value must be less than Max value.")
                         }
-                        sp = $('#' + pn + '_sp').val().trim()
-                        if(sp == ""){
-                            empty_is_valid = empty_is_valid && false
-                        }
-                        if(!(/[1-9]\d*.\d*|0.\d*[1-9]\d*/.test(sp))){
-                            data_is_valid = data_is_valid && false
-                        }
-                        param_dict[pn] = [min, max, parseFloat(sp), 'float']
+                        param_dict[pn] = [min, max, 'float']
                     }
                 }
             }
