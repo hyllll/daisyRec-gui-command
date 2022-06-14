@@ -71,6 +71,7 @@ loss_types = [
 ]
 
 weight_initializer = [
+    {'name': 'default'},
     {'name': 'normal'},
     {'name': 'uniform'},
     {'name': 'xavier_normal'},
@@ -78,6 +79,7 @@ weight_initializer = [
 ]
 
 optimizer = [
+    {'name': 'default'},
     {'name': 'sgd'},
     {'name': 'adam'},
     {'name': 'adagrad'},
