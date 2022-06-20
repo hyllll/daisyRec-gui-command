@@ -479,7 +479,7 @@
                         if(cs == ""){
                             empty_is_valid = empty_is_valid && false
                         }
-                        param_dict[pn] = [fnl_cs, 'choice']
+                        param_dict[pn] = [fnl_cs, 0, 0, 'choice']
                     } else {
                         // min = $('#' + pn + '_min').val().trim()
                         // max = $('#' + pn + '_max').val().trim()
@@ -505,7 +505,7 @@
                         if(cs == ""){
                             empty_is_valid = empty_is_valid && false
                         }
-                        param_dict[pn] = [fnl_cs, 'choice']
+                        param_dict[pn] = [fnl_cs, 0, 0, 'choice']
                     }
                 } else {
                     if(contain(tp, 'int')){
