@@ -392,7 +392,6 @@
             tmp = $('#hyperopt_trail').val()
             base += ' --hyperopt_trail=' + tmp
             tmp = $('#problem_type').val()
-            tmp = tmp.split('-')[0]
             base += ' --problem_type=' + tmp
             tmp = $('#algo_name').val()
             base += ' --algo_name=' + tmp
@@ -548,7 +547,7 @@
                             empty_is_valid = empty_is_valid && false
                             alert("Min value must be less than Max value.")
                         }
-                        param_dict[pn] = [min, max, 'float']
+                        param_dict[pn] = [min, max, 0, 'float']
                     }
                 }
             }
