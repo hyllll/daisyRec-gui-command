@@ -91,6 +91,18 @@
         return param_list
     }
 
+    function init_check_param(){
+        check_list = [
+            "batch_size", "dropout", "factors",
+            "lr", "num_layers", "num_ng",
+            "reg_1", "reg_2", "kl_reg", "maxk",
+            "node_dropout", "mess_dropout", "alpha", "elastic"
+        ]
+        for(i=0; i<check_list.length; i++){
+            $('#' + check_list[i]).prop("checked", false)
+        }
+    }
+
     function add_param_info(param_name, int_list) {
         if (int_list.indexOf(param_name) > -1){
             $('#holder').append(
@@ -123,6 +135,7 @@
         $('#bt1').click(function(){
             $('#specific_setting_div_tune').removeClass("hidden")
             $('#tune_command_div').removeClass("hidden")
+            init_check_param()
             switch($('#algo_name').val()) {
                 case 'multi-vae':
                     $('#batch_size').parent().show()
