@@ -101,7 +101,7 @@
                     <label>test_method</label>
                     <select class='form-control' id='test_method'>
                         {% for tm in test_methods %}
-                        <option id="{{tm.name}}" value="{{tm.name}}">{{tm.name}}</option>
+                        <option id="{{tm.name.split(' ')[0]}}" value="{{tm.name}}">{{tm.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -110,7 +110,7 @@
                     <label>val_method</label>
                     <select class='form-control' id='val_method'>
                         {% for vm in val_methods %}
-                        <option id="{{vm.name}}" value="{{vm.name}}">{{vm.name}}</option>
+                        <option id="{{vm.name.split(' ')[0]}}" value="{{vm.name}}">{{vm.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -145,7 +145,7 @@
                     <label>sample_method</label>
                     <select class='form-control' id='sample_method'>
                         {% for sm in sample_methods %}
-                        <option id="{{sm.name}}" value="{{sm.name}}">{{sm.name}}</option>
+                        <option id="{{sm.name.split(' ')[0]}}" value="{{sm.name}}">{{sm.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -195,7 +195,7 @@
                     <label>loss_type</label>
                     <select class='form-control' id='loss_type'>
                         {% for lt in loss_types %}
-                        <option id="{{lt.name}}" value="{{lt.name}}">{{lt.name}}</option>
+                        <option id="{{lt.name.split(' ')[0]}}" value="{{lt.name}}">{{lt.name}}</option>
                         {% endfor %}
                     </select>
                 </div>            
@@ -212,44 +212,30 @@
     <script>
         $(document).ready(function(){
             // --------- problem type event ---------
-            if($('#problem_type').val() == 'pair') {
-                    $('#multi-vae').hide()
-                    $('#cdae').hide()
-                    $('#itemknn').hide()
-                    $('#pop').hide()
-                    $('#slim').hide()
-        
-                    $('#CL (Cross-entropy Loss)').hide()
-                    $('#BPR (BPR Loss)').show()
-                    $('#TL (Top-1 Loss)').show()
-                    $('#HL (Hinge Loss)').show()
-                } else {
-                    $('#multi-vae').show()
-                    $('#cdae').show()
-                    $('#itemknn').show()
-                    $('#pop').show()
-                    $('#slim').show()
-        
-                    $('#CL (Cross-entropy Loss)').show()
-                    $('#BPR (BPR Loss)').hide()
-                    $('#TL (Top-1 Loss)').hide()
-                    $('#HL (Hinge Loss)').hide()
-                }
+            if($('#problem_type').val() == 'point-wise') {
+                    $('#BPR').hide()
+                    $('#TL').hide()
+                    $('#HL').hide()
+            }
+   
         
                 $('#problem_type').change(function(){
                     //point remove nothing
                     //pair remove vae cdae item2vec knn pop slim
-                    if($('#problem_type').val() == 'pair') {
+                    console.log("change")
+                    if($('#problem_type').val() == 'pair-wise') {
+                        
                         $('#multi-vae').hide()
                         $('#itemknn').hide()
-                        $('#pop').hide()
+                        $('#mostpop').hide()
                         $('#slim').hide()
                         $('#puresvd').hide()
         
-                        $('#CL (Cross-entropy Loss)').hide()
-                        $('#BPR (BPR Loss)').show()
-                        $('#TL (Top-1 Loss)').show()
-                        $('#HL (Hinge Loss)').show()
+                        $('#CL').hide()
+                        $('#SL').hide()
+                        $('#BPR').show()
+                        $('#TL').show()
+                        $('#HL').show()
                     } 
                     else {
                         $('#multi-vae').show()
@@ -258,10 +244,11 @@
                         $('#slim').show()
                         $('#puresvd').show()
         
-                        $('#CL (Cross-entropy Loss)').show()
-                        $('#BPR (BPR Loss)').hide()
-                        $('#TL (Top-1 Loss)').hide()
-                        $('#HL (Hinge Loss)').hide()
+                        $('#CL').show()
+                        $('#SL').show()
+                        $('#BPR').hide()
+                        $('#TL').hide()
+                        $('#HL').hide()
                     }
                 })
             // --------- weight initialize type event ---------
