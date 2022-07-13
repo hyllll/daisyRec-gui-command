@@ -21,7 +21,6 @@ algo_name = [
     {'name': 'nfm'},
     {'name': 'neumf'},
     {'name': 'itemknn'},
-    {'name': 'mostpop'},
     {'name': 'slim'},
     {'name': 'puresvd'}
 ]
